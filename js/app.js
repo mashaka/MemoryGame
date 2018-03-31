@@ -22,6 +22,7 @@ const GAME = {
     moves: 0,
     totalTime: 0,
     matchedCards: 0,
+    timer: setInterval(setTime, 1000),
     start() {
         this.clean();
         ELEMENTS.deck.innerHTML = '';
@@ -32,6 +33,8 @@ const GAME = {
             <i class="fa ${card}"></i>
             </li>`;
         }
+        clearInterval(this.timer);
+        this.timer = setInterval(setTime, 1000);
     },
     clean() {
         this.openCards = [];
@@ -57,7 +60,8 @@ const GAME = {
     },
     incMatched() {
         this.matchedCards += 2;
-        if(this.matchedCards == 2 * CARD_TYPES.length) {
+        if(this.matchedCards === 2 * CARD_TYPES.length) {
+            clearInterval(this.timer);
             $('#winModal').modal('show');
             ELEMENTS.modalBody.innerHTML = `
             <p>
@@ -114,7 +118,6 @@ ELEMENTS.deck.addEventListener('click', function(evt) {
 ELEMENTS.restartButton.addEventListener('click', () => {GAME.start();});
 ELEMENTS.playAgainButton.addEventListener('click', () => {GAME.start();});
 
-setInterval(setTime, 1000);
 GAME.start();
 
 //////////////////////////////////////////////////////////////////
